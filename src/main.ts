@@ -1,4 +1,3 @@
-import './styles.css';
 import '@salsafx/ui';
 import { Fx, Fonts, DisplayFonts, IconPacks, Themes, FxToaster } from '@salsafx/ui';
 

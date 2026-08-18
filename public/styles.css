@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--fx-font-family, 'Inter', system-ui, sans-serif);
     background: #0c0e12;
     min-height: 100vh;
     color: #e2e8f0;
@@ -13,13 +13,15 @@ body {
 }
 
 .app-header {
+    position: relative;
+    z-index: 2;
     background: #0f1218;
     border-bottom: 1px solid #18222e;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 20px;
     height: 46px;
+    overflow: visible;
 }
 
 .app-header-start,
@@ -33,13 +35,19 @@ body {
 }
 
 .app-header-end {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    height: 94px;
     gap: 12px;
+    z-index: 3;
 }
 
 .brand {
-    font-weight: 800;
-    font-size: .95rem;
-    letter-spacing: .04em;
+    font-family: var(--fx-font-family, 'Inter', system-ui, sans-serif);
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: .03em;
     color: #e2e8f0;
 }
 
@@ -86,10 +94,6 @@ body {
     gap: 2px;
 }
 
-.utc-clock-wrap-grid {
-    margin-top: 4px;
-}
-
 .utc-label {
     font-size: 8px;
     font-weight: 700;
@@ -104,11 +108,6 @@ body {
     color: #f59e0b;
     letter-spacing: .06em;
     line-height: 1;
-}
-
-.js-utc-clock-grid {
-    font-size: 1.1rem;
-    color: #38bdf8;
 }
 
 .page {

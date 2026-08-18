@@ -1,5 +1,6 @@
 import '@salsafx/ui';
 import { Fx, Fonts, DisplayFonts, IconPacks, Themes, FxToaster } from '@salsafx/ui';
+import './styles.css';
 
 Fx.configure({
     uiFont: Fonts.Inter,
@@ -69,11 +70,9 @@ function buildChart(id: string, data: number[], color: string, dimColor: string,
     const max = normalize ?? Math.max(...data);
     data.forEach((v, i) => {
         const bar = document.createElement('div');
-        bar.style.flex = '1';
-        bar.style.borderRadius = '2px 2px 0 0';
-        bar.style.minHeight = '2px';
-        bar.style.height = `${Math.max(2, Math.round((v / max) * 100))}%`;
-        bar.style.background = i === data.length - 1 ? color : dimColor;
+        bar.className = 'chart-bar';
+        bar.style.setProperty('--bar-h', `${Math.max(2, Math.round((v / max) * 100))}%`);
+        bar.style.setProperty('--bar-c', i === data.length - 1 ? color : dimColor);
         el.appendChild(bar);
     });
 }

@@ -44,13 +44,15 @@ if (rotary) {
     ];
 }
 
+type ClockHost = HTMLElement & { value: string };
+
 function updateClocks() {
     const now = new Date();
     const hh = String(now.getUTCHours()).padStart(2, '0');
     const mm = String(now.getUTCMinutes()).padStart(2, '0');
     const ss = String(now.getUTCSeconds()).padStart(2, '0');
-    document.querySelectorAll<HTMLElement>('.js-utc-clock').forEach(el => {
-        el.textContent = `${hh}:${mm}:${ss}`;
+    document.querySelectorAll<ClockHost>('.js-utc-clock').forEach(el => {
+        el.value = `${hh}:${mm}:${ss}`;
     });
 }
 updateClocks();

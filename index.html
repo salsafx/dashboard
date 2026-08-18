@@ -19,10 +19,16 @@
             <span class="pill pill-warn">⚠ WIND HIGH</span>
         </div>
         <div class="app-header-end">
-            <div class="utc-clock-wrap">
-                <span class="utc-label">UTC</span>
-                <span class="js-utc-clock">--:--:--</span>
-            </div>
+            <fx-display
+                class="js-utc-clock"
+                label="UTC"
+                value="--:--:--"
+                value-template="88:88:88"
+                has-shell="false"
+                foreground-color="#f59e0b"
+                label-color="#475569"
+                size="small"
+            ></fx-display>
             <fx-push-button label="Config" shape="round" background-color="#1e3a5f" is-animated>
                 <i slot="icon" class="fa-solid fa-sliders"></i>
             </fx-push-button>

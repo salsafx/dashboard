@@ -1,6 +1,5 @@
 import '@salsafx/ui';
 import { Fx, Fonts, DisplayFonts, IconPacks, Themes, FxToaster } from '@salsafx/ui';
-import './styles.css';
 
 Fx.configure({
     uiFont: Fonts.Inter,

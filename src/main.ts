@@ -1,5 +1,5 @@
-import { Fx, Fonts, DisplayFonts, IconPacks, Themes, FxToaster } from '@salsafx/ui';
 import '@salsafx/ui';
+import { Fx, Fonts, DisplayFonts, IconPacks, Themes, FxToaster } from '@salsafx/ui';
 
 Fx.configure({
     uiFont: Fonts.Inter,
@@ -8,7 +8,23 @@ Fx.configure({
     theme: Themes.DarkGreen,
 });
 
-const gridSwitch = document.getElementById('grid-mode') as any;
+type SwitchHost = HTMLElement & {
+    states: Array<{ id: string; label: string; backgroundColor: string }>;
+};
+
+type RotaryHost = HTMLElement & {
+    sectors: Array<{
+        id: string;
+        label: string;
+        color: string;
+        textColor: string;
+        ranges: string[];
+        startDeg: number;
+        endDeg: number;
+    }>;
+};
+
+const gridSwitch = document.querySelector<SwitchHost>('#grid-mode');
 if (gridSwitch) {
     gridSwitch.states = [
         { id: 'off', label: 'OFF', backgroundColor: '#334155' },
@@ -18,7 +34,7 @@ if (gridSwitch) {
     ];
 }
 
-const rotary = document.getElementById('bus-meter') as any;
+const rotary = document.querySelector<RotaryHost>('#bus-meter');
 if (rotary) {
     rotary.sectors = [
         { id: 'off', label: 'OFF', color: '#1e293b', textColor: '#475569', ranges: ['OFF'], startDeg: 250, endDeg: 290 },
@@ -53,7 +69,11 @@ function buildChart(id: string, data: number[], color: string, dimColor: string,
     const max = normalize ?? Math.max(...data);
     data.forEach((v, i) => {
         const bar = document.createElement('div');
-        bar.style.cssText = `flex:1;border-radius:2px 2px 0 0;min-height:2px;height:${Math.max(2, Math.round((v / max) * 100))}%;background:${i === data.length - 1 ? color : dimColor};`;
+        bar.style.flex = '1';
+        bar.style.borderRadius = '2px 2px 0 0';
+        bar.style.minHeight = '2px';
+        bar.style.height = `${Math.max(2, Math.round((v / max) * 100))}%`;
+        bar.style.background = i === data.length - 1 ? color : dimColor;
         el.appendChild(bar);
     });
 }

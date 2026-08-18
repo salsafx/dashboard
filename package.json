@@ -1,0 +1,19 @@
+{
+    "name": "turbctrl-demo",
+    "version": "1.0.0",
+    "description": "TurbCtrl Offshore — SalsaFX production demo",
+    "type": "module",
+    "scripts": {
+        "dev": "node node_modules/vite/bin/vite.js",
+        "build": "node node_modules/vite/bin/vite.js build",
+        "preview": "node node_modules/vite/bin/vite.js preview"
+    },
+    "dependencies": {
+        "@salsafx/ui": "file:../kingmaker-docs/ui",
+        "lit": "^3.3.3"
+    },
+    "devDependencies": {
+        "vite": "^6.0.0",
+        "typescript": "~5.8.0"
+    }
+}

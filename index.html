@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TURBCTRL — SalsaFX Demo</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* UTC clock widget replacement */
+        .utc-clock-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .utc-label {
+            font-size: 8px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+        .js-utc-clock {
+            font-family: 'DS-Digital', 'Courier New', monospace;
+            font-size: 1.4rem;
+            color: #f59e0b;
+            letter-spacing: .06em;
+            line-height: 1;
+        }
+
+        /* Bar chart bars */
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 90px;
+            background: #080b10;
+            border-radius: 4px;
+            padding: 6px 6px 0;
+        }
+        .chart-bars-sm {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 60px;
+            background: #080b10;
+            border-radius: 4px;
+            padding: 4px 4px 0;
+        }
+
+        /* Alarm table rows */
+        .alarm-grid {
+            display: grid;
+            grid-template-columns: 64px 1fr 180px 110px 90px 110px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div style="
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0c0e12;
+    min-height: 100vh;
+    color: #e2e8f0;
+    user-select: none;
+    box-sizing: border-box;
+">
+
+    <!-- ══ SLIM HEADER ══════════════════════════════════════════════════════ -->
+    <header style="
+        background:#0f1218;
+        border-bottom:1px solid #18222e;
+        display:flex;align-items:center;justify-content:space-between;
+        padding:0 20px;height:46px;box-sizing:border-box;
+    ">
+        <div style="display:flex;align-items:center;gap:14px;">
+            <span style="font-weight:800;font-size:.95rem;letter-spacing:.04em;color:#e2e8f0;">
+                <span style="color:#f59e0b;">TURB</span>CTRL
+                <span style="font-size:.6rem;color:#243040;font-weight:500;margin-left:6px;letter-spacing:.14em;">OFFSHORE v2.1</span>
+            </span>
+            <div style="width:1px;height:22px;background:#18222e;"></div>
+            <span style="color:#10b981;font-size:8px;font-weight:700;letter-spacing:.14em;padding:3px 8px;border:1px solid #052e16;border-radius:3px;">● ONLINE</span>
+            <span style="color:#f59e0b;font-size:8px;font-weight:700;letter-spacing:.14em;padding:3px 8px;border:1px solid #431407;border-radius:3px;">⚠ WIND HIGH</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div class="utc-clock-wrap">
+                <span class="utc-label">UTC</span>
+                <span class="js-utc-clock">--:--:--</span>
+            </div>
+            <fx-push-button label="Config" shape="round" background-color="#1e3a5f" is-animated>
+                <i slot="icon" class="fa-solid fa-sliders"></i>
+            </fx-push-button>
+            <fx-push-button id="estop-hdr" label="E-STOP" shape="round" background-color="#dc2626" is-animated>
+                <i slot="icon" class="fa-solid fa-hand"></i>
+            </fx-push-button>
+        </div>
+    </header>
+
+    <!-- ══ TABS ═════════════════════════════════════════════════════════════ -->
+    <fx-tabs selected-index="0" is-animated>
+
+        <!-- ─────────────────────────── TAB: OVERVIEW ──────────────────────── -->
+        <fx-tab header="Overview" selection-color="#f59e0b" icon="fa-solid fa-gauge-high">
+        <div style="padding:16px;display:flex;flex-direction:column;gap:16px;max-width:1800px;margin:0 auto;box-sizing:border-box;">
+
+            <!-- ROW 1: 4 Instrument Tiles -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch;">
+
+                <!-- TILE 1 — ROTOR SPEED -->
+                <fx-card title="Rotor Speed" badge="RPM" icon="fa-solid fa-rotate"
+                    accent-color="#f59e0b" badge-background="#431407">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;">
+                        <fx-radial-gauge value="82" min="0" max="110"
+                            label="N1 Turbine" unit="RPM" is-animated
+                            style="--fx-gauge-size:205px;--fx-gauge-gradient-start:#fde68a;--fx-gauge-gradient-middle:#f59e0b;--fx-gauge-gradient-end:#ea580c;">
+                        </fx-radial-gauge>
+                        <fx-separator padding="small" style="width:100%;"></fx-separator>
+                        <fx-stack-panel orientation="horizontal" spacing="14px">
+                            <fx-led-indicator label="T1" color="#f59e0b" is-active is-animated></fx-led-indicator>
+                            <fx-led-indicator label="T2" color="#fb923c" is-active is-animated></fx-led-indicator>
+                            <fx-led-indicator label="T3" color="#ef4444" is-blinking is-animated></fx-led-indicator>
+                        </fx-stack-panel>
+                    </div>
+                </fx-card>
+
+                <!-- TILE 2 — POWER OUTPUT -->
+                <fx-card title="Power Output" badge="MW" icon="fa-solid fa-bolt"
+                    accent-color="#84cc16" badge-background="#1a2e05">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;">
+                        <fx-radial-gauge value="4.5" min="0" max="10"
+                            label="Grid Output" unit="MW" is-animated
+                            style="--fx-gauge-size:205px;--fx-gauge-gradient-start:#d9f99d;--fx-gauge-gradient-middle:#84cc16;--fx-gauge-gradient-end:#4d7c0f;">
+                            <fx-gauge-needle-triangle slot="needle" value="4.5" min="0" max="10"
+                                style="--fx-gauge-needle-gradient-start:#bef264;--fx-gauge-needle-gradient-end:#65a30d;">
+                            </fx-gauge-needle-triangle>
+                            <fx-radial-simple-scale slot="scale" value="4.5" min="0" max="10" has-scale-labels>
+                            </fx-radial-simple-scale>
+                        </fx-radial-gauge>
+                        <fx-separator padding="small" style="width:100%;"></fx-separator>
+                        <fx-stack-panel orientation="horizontal" spacing="14px">
+                            <fx-led-indicator label="GRID OK" color="#84cc16" is-active is-animated></fx-led-indicator>
+                            <fx-led-indicator label="EXPORT"  color="#a3e635" is-active is-animated></fx-led-indicator>
+                            <fx-led-indicator label="SYNC"    color="#65a30d" is-active is-animated></fx-led-indicator>
+                            <fx-led-indicator label="PFC"     color="#4d7c0f" is-blinking is-active is-interactive is-animated></fx-led-indicator>
+                            <fx-led-indicator label="Q-CTRL"  color="#2dd4bf" is-active is-animated></fx-led-indicator>
+                        </fx-stack-panel>
+                    </div>
+                </fx-card>
+
+                <!-- TILE 3 — TEMPERATURES -->
+                <fx-card title="Temperatures" badge="°C" icon="fa-solid fa-temperature-half"
+                    accent-color="#fb7185" badge-background="#4c0519">
+                    <div style="display:flex;justify-content:space-around;align-items:flex-start;width:100%;gap:8px;flex:1;min-height:280px;">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                            <span style="font-size:8px;font-weight:700;color:#fb7185;text-transform:uppercase;letter-spacing:.12em;">GEARBOX</span>
+                            <fx-linear-gauge value="68" min="0" max="120"
+                                unit="°C" caption="°C" value-origin="end" is-animated
+                                style="--fx-linear-gauge-width:72px;--fx-linear-gauge-height:230px;--fx-linear-gauge-gradient-start:#86efac;--fx-linear-gauge-gradient-middle:#fb7185;--fx-linear-gauge-gradient-end:#dc2626;">
+                            </fx-linear-gauge>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                            <span style="font-size:8px;font-weight:700;color:#fda4af;text-transform:uppercase;letter-spacing:.12em;">GENERATOR</span>
+                            <fx-linear-bar value="78" min="0" max="120"
+                                ticks="7" ticks-side="right" unit="°C" caption="°C"
+                                length="230" is-animated
+                                style="--fx-bar-gradient-start:#86efac;--fx-bar-gradient-middle:#fb7185;--fx-bar-gradient-end:#dc2626;">
+                            </fx-linear-bar>
+                        </div>
+                    </div>
+                </fx-card>
+
+                <!-- TILE 4 — GRID READINGS -->
+                <fx-card title="Grid Readings" badge="LIVE" icon="fa-solid fa-tower-broadcast"
+                    accent-color="#38bdf8" badge-background="#082f49">
+                    <fx-display layout="horizontal" gap="10px">
+                        <div style="display:flex;flex-direction:column;justify-content:space-between;gap:6px;">
+                            <fx-display-region label="VOLT"  value="400"  suffix="V"  size="small"></fx-display-region>
+                            <fx-display-region label="FREQ"  value="50.0" suffix="Hz" size="small"></fx-display-region>
+                            <fx-display-region label="cos φ" value="0.98"             size="small"></fx-display-region>
+                        </div>
+                        <fx-display-region label="AMPS" value="632" suffix="A" size="x-large"></fx-display-region>
+                    </fx-display>
+                    <div class="utc-clock-wrap" style="margin-top:4px;">
+                        <span class="utc-label">GRID TIME</span>
+                        <span class="js-utc-clock" style="font-size:1.1rem;color:#38bdf8;"></span>
+                    </div>
+                    <div style="margin-top:auto;display:flex;justify-content:center;width:100%;">
+                        <fx-semaphore value="go" label="GRID STATUS" orientation="horizontal" has-shell>
+                            <fx-semaphore-state value="stop" color="#dc2626" label="FAULT"></fx-semaphore-state>
+                            <fx-semaphore-state value="warn" color="#f59e0b" label="WARN"></fx-semaphore-state>
+                            <fx-semaphore-state value="go"   color="#10b981" label="OK"></fx-semaphore-state>
+                        </fx-semaphore>
+                    </div>
+                </fx-card>
+
+            </div>
+
+            <!-- ROW 2: Controls -->
+            <div style="display:grid;grid-template-columns:200px 1fr 1fr 200px;gap:16px;">
+
+                <!-- 2.1 PITCH SETPOINT -->
+                <fx-group-box title="PITCH SETPOINT" title-color="#14b8a6"
+                    border="none" padding="20px" gap="16px">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                        <span style="font-size:8px;font-weight:700;color:#14b8a6;text-transform:uppercase;letter-spacing:.12em;">PITCH ANGLE</span>
+                        <fx-potentiometer value="35" min="0" max="90" label="Pitch" unit="°"
+                            ticks="10" is-animated
+                            style="--fx-potentiometer-size:155px;--fx-potentiometer-theme-color:#14b8a6;">
+                        </fx-potentiometer>
+                    </div>
+                    <div style="border-top:1px solid #1c2530;padding-top:14px;width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;">
+                        <span style="font-size:8px;font-weight:700;color:#243040;text-transform:uppercase;letter-spacing:.12em;">PITCH SYS FAULT</span>
+                        <fx-semaphore value="warn" label="PITCH SYS" orientation="horizontal" has-shell>
+                            <fx-semaphore-state value="stop" color="#ef4444" label="ERR"></fx-semaphore-state>
+                            <fx-semaphore-state value="warn" color="#f59e0b" label="MAINT"></fx-semaphore-state>
+                            <fx-semaphore-state value="go"   color="#10b981" label="OK"></fx-semaphore-state>
+                        </fx-semaphore>
+                    </div>
+                </fx-group-box>
+
+                <!-- 2.2 BLADE & TORQUE -->
+                <fx-group-box title="BLADE &amp; TORQUE CONTROL" title-color="#14b8a6"
+                    border="none" padding="20px" gap="12px">
+                    <div style="display:flex;justify-content:space-around;width:100%;gap:12px;align-items:flex-start;">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+                            <span style="font-size:8px;font-weight:700;color:#14b8a6;text-transform:uppercase;letter-spacing:.12em;">BLADE 1</span>
+                            <fx-fader value="35" min="0" max="90" label="B1" unit="°"
+                                orientation="vertical" ticks="7" has-scale-labels ticks-side="left"
+                                is-animated length="190"
+                                style="--fx-bar-width:72px;--fx-bar-gradient-start:#99f6e4;--fx-bar-gradient-middle:#14b8a6;--fx-bar-gradient-end:#0f766e;">
+                            </fx-fader>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+                            <span style="font-size:8px;font-weight:700;color:#2dd4bf;text-transform:uppercase;letter-spacing:.12em;">BLADE 2</span>
+                            <fx-fader value="32" min="0" max="90" label="B2" unit="°"
+                                orientation="vertical" ticks="7" has-scale-labels ticks-side="right"
+                                is-animated length="190"
+                                style="--fx-bar-width:72px;--fx-bar-gradient-start:#99f6e4;--fx-bar-gradient-middle:#2dd4bf;--fx-bar-gradient-end:#0d9488;">
+                            </fx-fader>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+                            <span style="font-size:8px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;">TORQUE %</span>
+                            <fx-linear-bar value="72" min="0" max="100"
+                                ticks="11" ticks-side="right" unit="%" caption="%"
+                                length="190" is-animated
+                                style="--fx-bar-gradient-start:#fde68a;--fx-bar-gradient-middle:#f59e0b;--fx-bar-gradient-end:#ea580c;">
+                            </fx-linear-bar>
+                        </div>
+                    </div>
+                </fx-group-box>
+
+                <!-- 2.3 TURBINE CONTROL -->
+                <fx-group-box title="TURBINE CONTROL" title-color="#f59e0b"
+                    border="none" padding="20px" gap="16px">
+                    <div style="display:flex;gap:16px;width:100%;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                            <span style="font-size:8px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;">GRID MODE</span>
+                            <fx-radial-switch id="grid-mode" active-id="grid"
+                                size="210" track-width="42" is-animated foreground-color="#fff">
+                            </fx-radial-switch>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:14px;align-items:center;flex:1;min-width:180px;">
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;">
+                                <span style="font-size:8px;font-weight:700;color:#84cc16;text-transform:uppercase;letter-spacing:.12em;">BRAKE MODE</span>
+                                <fx-switch active-id="auto" state-width="80" is-animated>
+                                    <fx-switch-state value="release" label="Release" foreground-color="#fff" background-color="#84cc16"></fx-switch-state>
+                                    <fx-switch-state value="auto"    label="Auto"    foreground-color="#fff" background-color="#14b8a6"></fx-switch-state>
+                                    <fx-switch-state value="engage"  label="Engage"  foreground-color="#fff" background-color="#ef4444"></fx-switch-state>
+                                </fx-switch>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid #1c2530;padding-top:12px;width:100%;">
+                                <span style="font-size:8px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;">COMMANDS</span>
+                                <fx-stack-panel orientation="horizontal" spacing="10px" align-y="bottom">
+                                    <fx-push-button label="Start"  background-color="#84cc16" type="latching" is-animated><i slot="icon" class="fa-solid fa-play"></i></fx-push-button>
+                                    <fx-push-button label="Stop"   background-color="#334155" is-animated><i slot="icon" class="fa-solid fa-stop"></i></fx-push-button>
+                                    <fx-push-button label="Reset"  background-color="#14b8a6" is-animated><i slot="icon" class="fa-solid fa-arrow-rotate-left"></i></fx-push-button>
+                                    <fx-push-button label="E-STOP" background-color="#dc2626" shape="roundedRect" type="latching" label-position="inside" text-rendering-mode="shaded" is-animated></fx-push-button>
+                                </fx-stack-panel>
+                            </div>
+                        </div>
+                    </div>
+                </fx-group-box>
+
+                <!-- 2.4 BUS METER -->
+                <fx-group-box title="BUS METER" title-color="#334155"
+                    border="none" padding="20px" gap="18px">
+                    <fx-rotary-selector id="bus-meter"
+                        selected-sector="ac" selected-range="400V"
+                        style="--fx-size:160px;">
+                    </fx-rotary-selector>
+                </fx-group-box>
+
+            </div>
+
+            <!-- ROW 3: System Status -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch;">
+
+                <fx-card title="Turbine Status" badge="FARM" icon="fa-solid fa-wind"
+                    accent-color="#84cc16" badge-background="#1a2e05" padding="14px 18px">
+                    <fx-stack-panel orientation="horizontal" spacing="14px">
+                        <fx-led-indicator label="T1 RUN"   color="#84cc16" is-active is-animated shape="rect" style="--fx-led-size:13px;"></fx-led-indicator>
+                        <fx-led-indicator label="T2 RUN"   color="#84cc16" is-active is-animated shape="rect" style="--fx-led-size:13px;"></fx-led-indicator>
+                        <fx-led-indicator label="T3 MAINT" color="#f59e0b" is-blinking is-active is-interactive is-animated shape="rect" style="--fx-led-size:13px;"></fx-led-indicator>
+                        <fx-led-indicator label="T4 OFF"   color="#475569" is-animated shape="rect" style="--fx-led-size:13px;"></fx-led-indicator>
+                        <fx-led-indicator label="T5 RUN"   color="#84cc16" is-active is-animated shape="rect" style="--fx-led-size:13px;"></fx-led-indicator>
+                        <fx-led-indicator label="T6 FAULT" color="#ef4444" is-interactive is-animated shape="rect" style="--fx-led-size:13px;"></fx-led-indicator>
+                    </fx-stack-panel>
+                </fx-card>
+
+                <fx-card title="Safety Signals" badge="I/O" icon="fa-solid fa-shield-halved"
+                    accent-color="#f59e0b" badge-background="#431407" padding="14px 18px">
+                    <div style="display:flex;gap:16px;align-items:flex-end;justify-content:center;width:100%;">
+                        <fx-semaphore value="go"   label="PITCH" orientation="vertical" has-shell></fx-semaphore>
+                        <fx-semaphore value="warn" label="YAW"   orientation="vertical" has-shell>
+                            <fx-semaphore-state value="stop" color="#dc2626" label="ERR"></fx-semaphore-state>
+                            <fx-semaphore-state value="warn" color="#f59e0b" label="LOW"></fx-semaphore-state>
+                            <fx-semaphore-state value="go"   color="#10b981" label="OK"></fx-semaphore-state>
+                        </fx-semaphore>
+                        <fx-semaphore value="l2" label="PHASE" orientation="horizontal" has-shell>
+                            <fx-semaphore-state value="l1" color="#38bdf8" label="L1"></fx-semaphore-state>
+                            <fx-semaphore-state value="l2" color="#84cc16" label="L2" icon="fa-solid fa-bolt"></fx-semaphore-state>
+                            <fx-semaphore-state value="l3" color="#f59e0b" label="L3"></fx-semaphore-state>
+                        </fx-semaphore>
+                    </div>
+                </fx-card>
+
+                <fx-card title="Drive Systems" badge="BUS" icon="fa-solid fa-microchip"
+                    accent-color="#14b8a6" badge-background="#042f2e" padding="14px 18px">
+                    <fx-stack-panel orientation="horizontal" spacing="16px">
+                        <fx-led-indicator label="MAIN INV"    color="#14b8a6" is-active is-animated></fx-led-indicator>
+                        <fx-led-indicator label="CONV 2"      color="#2dd4bf" is-animated></fx-led-indicator>
+                        <fx-led-indicator label="TRANSFORMER" color="#5eead4" is-blinking is-active is-interactive is-animated></fx-led-indicator>
+                        <fx-led-indicator label="CROWBAR"     color="#99f6e4" is-active is-animated></fx-led-indicator>
+                    </fx-stack-panel>
+                </fx-card>
+
+                <fx-card title="Control Mode" badge="PLC" icon="fa-solid fa-gamepad"
+                    accent-color="#38bdf8" badge-background="#082f49" padding="14px 18px">
+                    <fx-stack-panel orientation="horizontal" spacing="20px">
+                        <fx-led-indicator label="AUTO"   color="#84cc16" name="v2ctrl" is-active  is-interactive is-animated shape="rect" style="--fx-led-size:15px;"></fx-led-indicator>
+                        <fx-led-indicator label="MANUAL" color="#f59e0b" name="v2ctrl" is-interactive is-animated shape="rect" style="--fx-led-size:15px;"></fx-led-indicator>
+                        <fx-led-indicator label="REMOTE" color="#38bdf8" name="v2ctrl" is-interactive is-animated shape="rect" style="--fx-led-size:15px;"></fx-led-indicator>
+                    </fx-stack-panel>
+                </fx-card>
+
+            </div>
+
+        </div>
+        </fx-tab>
+
+        <!-- ─────────────────────────── TAB: ALARMS ────────────────────────── -->
+        <fx-tab header="Alarms" selection-color="#ef4444" badge="8" icon="fa-solid fa-triangle-exclamation">
+        <div style="padding:16px;max-width:1800px;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+                <fx-card title="Critical" badge="3" accent-color="#ef4444" badge-background="#4c0519" icon="fa-solid fa-circle-xmark">
+                    <fx-stack-panel orientation="vertical" spacing="8px" align-x="left" style="width:100%;">
+                        <fx-led-indicator label="T6 DRIVE FAULT"  color="#ef4444" is-active is-blinking is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="PITCH ACTUATOR"  color="#ef4444" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="PHASE IMBALANCE" color="#ef4444" is-active is-blinking is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                    </fx-stack-panel>
+                </fx-card>
+                <fx-card title="Warnings" badge="5" accent-color="#f59e0b" badge-background="#431407" icon="fa-solid fa-triangle-exclamation">
+                    <fx-stack-panel orientation="vertical" spacing="8px" align-x="left" style="width:100%;">
+                        <fx-led-indicator label="T3 MAINTENANCE"  color="#f59e0b" is-active is-blinking is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="WIND HIGH 18m/s" color="#f59e0b" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="GEARBOX TEMP"    color="#f59e0b" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="GRID FREQ DRIFT" color="#f59e0b" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="CONV 2 OFFLINE"  color="#f59e0b" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                    </fx-stack-panel>
+                </fx-card>
+                <fx-card title="Info" badge="2" accent-color="#38bdf8" badge-background="#082f49" icon="fa-solid fa-circle-info">
+                    <fx-stack-panel orientation="vertical" spacing="8px" align-x="left" style="width:100%;">
+                        <fx-led-indicator label="GRID SYNC DONE"  color="#38bdf8" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                        <fx-led-indicator label="FW v3.4.1 AVAIL" color="#38bdf8" is-active is-animated style="--fx-led-size:11px;"></fx-led-indicator>
+                    </fx-stack-panel>
+                </fx-card>
+                <fx-card title="Alarm Status" badge="LIVE" accent-color="#10b981" badge-background="#052e16" icon="fa-solid fa-shield-halved">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;">
+                        <fx-semaphore value="stop" label="ALARM SYS" orientation="vertical" has-shell>
+                            <fx-semaphore-state value="stop" color="#ef4444" label="CRIT"></fx-semaphore-state>
+                            <fx-semaphore-state value="warn" color="#f59e0b" label="WARN"></fx-semaphore-state>
+                            <fx-semaphore-state value="ok"   color="#10b981" label="OK"></fx-semaphore-state>
+                        </fx-semaphore>
+                        <fx-push-button id="ack-btn" label="ACK ALL" background-color="#334155" is-animated>
+                            <i slot="icon" class="fa-solid fa-check-double"></i>
+                        </fx-push-button>
+                    </div>
+                </fx-card>
+            </div>
+
+            <fx-card title="Active Alarm Log" accent-color="#ef4444" icon="fa-solid fa-bell" badge="10" badge-background="#4c0519">
+                <div style="width:100%;">
+                    <div class="alarm-grid" style="padding:5px 12px;border-bottom:1px solid #1c2530;font-size:.65rem;color:#334155;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">
+                        <span>SEV</span><span>Description</span><span>Component</span><span>Time</span><span>State</span><span>Action</span>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#4c0519;color:#ef4444;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">CRIT</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Drive IGBT Over-temperature</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">T6 / INVERTER</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">12:18:32</span>
+                        <span style="color:#ef4444;font-size:.65rem;font-weight:700;">ACTIVE</span>
+                        <fx-push-button label="ACK" background-color="#1e3a5f" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#4c0519;color:#ef4444;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">CRIT</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Pitch Actuator Failure B2</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">BLADE 2 PITCH</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">12:15:07</span>
+                        <span style="color:#ef4444;font-size:.65rem;font-weight:700;">ACTIVE</span>
+                        <fx-push-button label="ACK" background-color="#1e3a5f" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#4c0519;color:#ef4444;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">CRIT</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Phase L3 Imbalance &gt;5%</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">MAIN BUS</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">12:10:44</span>
+                        <span style="color:#ef4444;font-size:.65rem;font-weight:700;">ACTIVE</span>
+                        <fx-push-button label="ACK" background-color="#1e3a5f" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#431407;color:#f59e0b;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">WARN</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Scheduled Maintenance Due</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">T3 GEARBOX</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">11:55:00</span>
+                        <span style="color:#f59e0b;font-size:.65rem;font-weight:700;">PENDING</span>
+                        <fx-push-button label="ACK" background-color="#1e3a5f" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#431407;color:#f59e0b;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">WARN</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Wind Speed 18.2 m/s (High)</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">ANEMOMETER</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">11:52:18</span>
+                        <span style="color:#ef4444;font-size:.65rem;font-weight:700;">ACTIVE</span>
+                        <fx-push-button label="ACK" background-color="#1e3a5f" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#431407;color:#f59e0b;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">WARN</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Gearbox Oil Temp 68 °C</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">T1 GEARBOX</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">11:48:05</span>
+                        <span style="color:#ef4444;font-size:.65rem;font-weight:700;">ACTIVE</span>
+                        <fx-push-button label="ACK" background-color="#1e3a5f" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;border-bottom:1px solid #0f1218;font-size:.72rem;">
+                        <span style="background:#082f49;color:#38bdf8;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">INFO</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Grid Synchronisation Complete</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">GRID CTRL</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">11:22:47</span>
+                        <span style="color:#64748b;font-size:.65rem;font-weight:700;">ACK</span>
+                        <fx-push-button label="VIEW" background-color="#1e293b" is-animated></fx-push-button>
+                    </div>
+                    <div class="alarm-grid" style="padding:8px 12px;font-size:.72rem;">
+                        <span style="background:#082f49;color:#38bdf8;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.1em;width:fit-content;">INFO</span>
+                        <span style="color:#cbd5e1;font-weight:500;">Firmware v3.4.1 Available</span>
+                        <span style="color:#475569;font-family:monospace;font-size:.65rem;">PLC SYSTEM</span>
+                        <span style="color:#334155;font-family:monospace;font-size:.65rem;">09:00:00</span>
+                        <span style="color:#64748b;font-size:.65rem;font-weight:700;">ACK</span>
+                        <fx-push-button label="VIEW" background-color="#1e293b" is-animated></fx-push-button>
+                    </div>
+                </div>
+            </fx-card>
+
+        </div>
+        </fx-tab>
+
+        <!-- ─────────────────────────── TAB: TRENDS ────────────────────────── -->
+        <fx-tab header="Trends" selection-color="#84cc16" icon="fa-solid fa-chart-line">
+        <div style="padding:16px;max-width:1800px;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+                <fx-card title="Power Output — 24 h" badge="MW" accent-color="#84cc16" badge-background="#1a2e05" icon="fa-solid fa-bolt">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-power" class="chart-bars"></div>
+                        <div style="display:flex;justify-content:space-between;padding:0 2px;">
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">00:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">06:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">12:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">18:00</span>
+                            <span style="font-size:.58rem;color:#84cc16;font-family:monospace;font-weight:700;">NOW</span>
+                        </div>
+                        <fx-separator padding="small" style="width:100%;"></fx-separator>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;">Current</span>
+                            <span style="font-size:1.2rem;font-weight:700;color:#84cc16;">4.5 <span style="font-size:.7rem;color:#65a30d;">MW</span></span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;">
+                            <span style="font-size:.65rem;color:#334155;">Daily avg</span>
+                            <span style="font-size:.72rem;color:#4d7c0f;font-weight:600;">4.1 MW</span>
+                        </div>
+                    </div>
+                </fx-card>
+
+                <fx-card title="Wind Speed — 24 h" badge="m/s" accent-color="#38bdf8" badge-background="#082f49" icon="fa-solid fa-wind">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-wind" class="chart-bars"></div>
+                        <div style="display:flex;justify-content:space-between;padding:0 2px;">
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">00:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">06:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">12:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">18:00</span>
+                            <span style="font-size:.58rem;color:#38bdf8;font-family:monospace;font-weight:700;">NOW</span>
+                        </div>
+                        <fx-separator padding="small" style="width:100%;"></fx-separator>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;">Current</span>
+                            <span style="font-size:1.2rem;font-weight:700;color:#38bdf8;">18.2 <span style="font-size:.7rem;color:#0ea5e9;">m/s</span></span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;">
+                            <span style="font-size:.65rem;color:#f59e0b;letter-spacing:.08em;">⚠ HIGH WIND</span>
+                            <span style="font-size:.72rem;color:#f59e0b;font-weight:600;">est. +3 h</span>
+                        </div>
+                    </div>
+                </fx-card>
+
+                <fx-card title="Gearbox Temp — 24 h" badge="°C" accent-color="#fb7185" badge-background="#4c0519" icon="fa-solid fa-temperature-half">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-temp" class="chart-bars"></div>
+                        <div style="display:flex;justify-content:space-between;padding:0 2px;">
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">00:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">06:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">12:00</span>
+                            <span style="font-size:.58rem;color:#334155;font-family:monospace;">18:00</span>
+                            <span style="font-size:.58rem;color:#fb7185;font-family:monospace;font-weight:700;">NOW</span>
+                        </div>
+                        <fx-separator padding="small" style="width:100%;"></fx-separator>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;">Current</span>
+                            <span style="font-size:1.2rem;font-weight:700;color:#fb7185;">68 <span style="font-size:.7rem;color:#e11d48;">°C</span></span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;">
+                            <span style="font-size:.65rem;color:#f59e0b;letter-spacing:.08em;">⚠ ELEVATED</span>
+                            <span style="font-size:.72rem;color:#f59e0b;font-weight:600;">TREND ↑</span>
+                        </div>
+                    </div>
+                </fx-card>
+
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+                <fx-card title="Rotor RPM" badge="RPM" accent-color="#f59e0b" badge-background="#431407" icon="fa-solid fa-rotate">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-rpm" class="chart-bars-sm"></div>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;">Current</span>
+                            <span style="font-size:1.1rem;font-weight:700;color:#f59e0b;">82 <span style="font-size:.65rem;">RPM</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Grid Voltage" badge="V" accent-color="#38bdf8" badge-background="#082f49" icon="fa-solid fa-tower-broadcast">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-volt" class="chart-bars-sm"></div>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;">Current</span>
+                            <span style="font-size:1.1rem;font-weight:700;color:#38bdf8;">400 <span style="font-size:.65rem;">V</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Grid Frequency" badge="Hz" accent-color="#a78bfa" badge-background="#2e1065" icon="fa-solid fa-wave-square">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-freq" class="chart-bars-sm"></div>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;">Current</span>
+                            <span style="font-size:1.1rem;font-weight:700;color:#a78bfa;">50.3 <span style="font-size:.65rem;">Hz</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Energy Today" badge="MWh" accent-color="#10b981" badge-background="#052e16" icon="fa-solid fa-leaf">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+                        <div id="chart-energy" class="chart-bars-sm"></div>
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                            <span style="font-size:.65rem;color:#64748b;">Today</span>
+                            <span style="font-size:1.1rem;font-weight:700;color:#10b981;">89.4 <span style="font-size:.65rem;">MWh</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+            </div>
+
+        </div>
+        </fx-tab>
+
+    </fx-tabs>
+
+</div>
+
+<!-- FX-TOASTER -->
+<fx-toaster placement="top-end"></fx-toaster>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

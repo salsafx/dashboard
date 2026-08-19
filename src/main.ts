@@ -1,5 +1,6 @@
 import '@salsafx/ui';
 import { Fx, Fonts, DisplayFonts, IconPacks, Themes, FxToaster } from '@salsafx/ui';
+import './LiveClock';
 
 Fx.configure({
     uiFont: Fonts.Inter,
@@ -44,7 +45,16 @@ if (rotary) {
     ];
 }
 
+type ValueHost = HTMLElement & { value: number };
 type ClockHost = HTMLElement & { value: string };
+
+const dcPot = document.querySelector<ValueHost>('#dc-pot');
+const dcGauge = document.querySelector<ValueHost>('#dc-gauge');
+if (dcPot && dcGauge) {
+    dcPot.addEventListener('input', (event) => {
+        dcGauge.value = (event as CustomEvent<{ value: number }>).detail.value;
+    });
+}
 
 function updateClocks() {
     const now = new Date();

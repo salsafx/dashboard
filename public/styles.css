@@ -150,6 +150,11 @@ body {
     display: grid;
     grid-template-columns: 200px 1fr 1fr 200px;
     gap: 16px;
+    align-items: stretch;
+}
+
+.grid-controls > fx-group-box {
+    min-height: 0;
 }
 
 .stack {
@@ -234,6 +239,10 @@ body {
     color: #84cc16;
 }
 
+.caption-violet {
+    color: #a78bfa;
+}
+
 .caption-muted {
     color: #243040;
 }
@@ -259,9 +268,28 @@ body {
 .blades {
     display: flex;
     justify-content: space-around;
+    align-items: stretch;
     width: 100%;
+    height: 100%;
+    min-height: 0;
     gap: 12px;
-    align-items: flex-start;
+}
+
+.blades-box::part(content) {
+    flex: 1;
+    min-height: 0;
+}
+
+.blades .stack {
+    height: 100%;
+    min-height: 0;
+}
+
+.fader-b1,
+.fader-b2,
+.bar-torque {
+    height: 100%;
+    --fx-bar-height: 100%;
 }
 
 .turbine {
@@ -282,14 +310,6 @@ body {
     min-width: 180px;
 }
 
-.safety {
-    display: flex;
-    gap: 16px;
-    align-items: flex-end;
-    justify-content: center;
-    width: 100%;
-}
-
 fx-separator {
     width: 100%;
 }
@@ -299,6 +319,13 @@ fx-separator {
     --fx-gauge-gradient-start: #fde68a;
     --fx-gauge-gradient-middle: #f59e0b;
     --fx-gauge-gradient-end: #ea580c;
+}
+
+.gauge-dc {
+    --fx-gauge-size: 220px;
+    --fx-gauge-gradient-start: #ddd6fe;
+    --fx-gauge-gradient-middle: #a78bfa;
+    --fx-gauge-gradient-end: #6d28d9;
 }
 
 .gauge-power {
@@ -319,6 +346,17 @@ fx-separator {
     --fx-linear-gauge-gradient-start: #86efac;
     --fx-linear-gauge-gradient-middle: #fb7185;
     --fx-linear-gauge-gradient-end: #dc2626;
+}
+
+.gauge-farm {
+    display: flex;
+    width: 100%;
+    align-self: stretch;
+    --fx-linear-gauge-width: 100% !important;
+    --fx-linear-gauge-height: 72px;
+    --fx-linear-gauge-gradient-start: #d9f99d;
+    --fx-linear-gauge-gradient-middle: #84cc16;
+    --fx-linear-gauge-gradient-end: #4d7c0f;
 }
 
 .bar-heat {
@@ -347,6 +385,7 @@ fx-separator {
 }
 
 .bar-torque {
+    --fx-bar-width: 72px;
     --fx-bar-gradient-start: #fde68a;
     --fx-bar-gradient-middle: #f59e0b;
     --fx-bar-gradient-end: #ea580c;
@@ -356,8 +395,16 @@ fx-separator {
     --fx-size: 160px;
 }
 
-.led-farm {
-    --fx-led-size: 13px;
+.clock-card::part(content) {
+    flex: 1;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.pot-dc {
+    --fx-potentiometer-size: 155px;
+    --fx-potentiometer-theme-color: #a78bfa;
 }
 
 .led-mode {

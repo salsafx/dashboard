@@ -142,27 +142,27 @@
                 </fx-group-box>
 
                 <fx-group-box title="BLADE &amp; TORQUE CONTROL" title-color="#14b8a6"
-                    border="none" padding="20px" gap="12px">
+                    class="blades-box" border="none" padding="20px" gap="12px" align-x="stretch" align-y="stretch">
                     <div class="blades">
-                        <div class="stack stack-6 stack-grow">
+                        <div class="stack stack-6">
                             <span class="caption caption-teal">BLADE 1</span>
                             <fx-fader class="fader-b1" value="35" min="0" max="90" label="B1" unit="°"
                                 orientation="vertical" ticks="7" has-scale-labels ticks-side="left"
-                                is-animated length="190">
+                                is-animated>
                             </fx-fader>
                         </div>
-                        <div class="stack stack-6 stack-grow">
+                        <div class="stack stack-6">
                             <span class="caption caption-cyan">BLADE 2</span>
                             <fx-fader class="fader-b2" value="32" min="0" max="90" label="B2" unit="°"
                                 orientation="vertical" ticks="7" has-scale-labels ticks-side="right"
-                                is-animated length="190">
+                                is-animated>
                             </fx-fader>
                         </div>
-                        <div class="stack stack-6 stack-grow">
+                        <div class="stack stack-6">
                             <span class="caption caption-amber">TORQUE %</span>
                             <fx-linear-bar class="bar-torque" value="72" min="0" max="100"
                                 ticks="11" ticks-side="right" unit="%" caption="%"
-                                length="190" is-animated>
+                                is-animated>
                             </fx-linear-bar>
                         </div>
                     </div>
@@ -186,15 +186,6 @@
                                     <fx-switch-state value="engage" label="Engage" foreground-color="#fff" background-color="#ef4444"></fx-switch-state>
                                 </fx-switch>
                             </div>
-                            <div class="split split-12">
-                                <span class="caption caption-amber">COMMANDS</span>
-                                <fx-stack-panel orientation="horizontal" spacing="10px" align-y="bottom">
-                                    <fx-push-button label="Start" background-color="#84cc16" type="latching" is-animated><i slot="icon" class="fa-solid fa-play"></i></fx-push-button>
-                                    <fx-push-button label="Stop" background-color="#334155" is-animated><i slot="icon" class="fa-solid fa-stop"></i></fx-push-button>
-                                    <fx-push-button label="Reset" background-color="#14b8a6" is-animated><i slot="icon" class="fa-solid fa-arrow-rotate-left"></i></fx-push-button>
-                                    <fx-push-button label="E-STOP" background-color="#dc2626" shape="roundedRect" type="latching" label-position="inside" text-rendering-mode="shaded" is-animated></fx-push-button>
-                                </fx-stack-panel>
-                            </div>
                         </div>
                     </div>
                 </fx-group-box>
@@ -210,52 +201,69 @@
 
             <div class="grid-4">
 
+                <fx-card class="clock-card" title="Live Clock" badge="UTC" icon="fa-solid fa-clock"
+                    accent-color="#14b8a6" badge-background="#042f2e" padding="14px 18px">
+                    <div class="stack stack-10">
+                        <live-clock size="250" has-shell has-scale-labels></live-clock>
+                        <fx-separator padding="small"></fx-separator>
+                        <fx-stack-panel orientation="horizontal" spacing="20px">
+                            <fx-led-indicator class="led-mode" label="AUTO" color="#84cc16" name="v2ctrl" is-active is-interactive is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-mode" label="MANUAL" color="#f59e0b" name="v2ctrl" is-interactive is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-mode" label="REMOTE" color="#38bdf8" name="v2ctrl" is-interactive is-animated shape="rect"></fx-led-indicator>
+                        </fx-stack-panel>
+                    </div>
+                </fx-card>
+
                 <fx-card title="Turbine Status" badge="FARM" icon="fa-solid fa-wind"
                     accent-color="#84cc16" badge-background="#1a2e05" padding="14px 18px">
-                    <fx-stack-panel orientation="horizontal" spacing="14px">
-                        <fx-led-indicator class="led-farm" label="T1 RUN" color="#84cc16" is-active is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-farm" label="T2 RUN" color="#84cc16" is-active is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-farm" label="T3 MAINT" color="#f59e0b" is-blinking is-active is-interactive is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-farm" label="T4 OFF" color="#475569" is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-farm" label="T5 RUN" color="#84cc16" is-active is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-farm" label="T6 FAULT" color="#ef4444" is-interactive is-animated shape="rect"></fx-led-indicator>
-                    </fx-stack-panel>
+                    <div class="stack stack-10">
+                        <fx-linear-gauge class="gauge-farm" value="4.5" min="0" max="10"
+                            orientation="horizontal" unit="MW" value-origin="end" is-animated>
+                        </fx-linear-gauge>
+                        <fx-separator padding="small"></fx-separator>
+                        <fx-stack-panel orientation="horizontal" spacing="14px">
+                            <fx-led-indicator class="led-farm" label="T1 RUN" color="#84cc16" is-active is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-farm" label="T2 RUN" color="#84cc16" is-active is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-farm" label="T3 MAINT" color="#f59e0b" is-blinking is-active is-interactive is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-farm" label="T4 OFF" color="#475569" is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-farm" label="T6 FAULT" color="#ef4444" is-interactive is-animated shape="rect"></fx-led-indicator>
+                        </fx-stack-panel>
+                    </div>
                 </fx-card>
 
                 <fx-card title="Safety Signals" badge="I/O" icon="fa-solid fa-shield-halved"
                     accent-color="#f59e0b" badge-background="#431407" padding="14px 18px">
-                    <div class="safety">
-                        <fx-semaphore value="go" label="PITCH" orientation="vertical" has-shell></fx-semaphore>
-                        <fx-semaphore value="warn" label="YAW" orientation="vertical" has-shell>
-                            <fx-semaphore-state value="stop" color="#dc2626" label="ERR"></fx-semaphore-state>
-                            <fx-semaphore-state value="warn" color="#f59e0b" label="LOW"></fx-semaphore-state>
-                            <fx-semaphore-state value="go" color="#10b981" label="OK"></fx-semaphore-state>
-                        </fx-semaphore>
-                        <fx-semaphore value="l2" label="PHASE" orientation="horizontal" has-shell>
-                            <fx-semaphore-state value="l1" color="#38bdf8" label="L1"></fx-semaphore-state>
-                            <fx-semaphore-state value="l2" color="#84cc16" label="L2" icon="fa-solid fa-bolt"></fx-semaphore-state>
-                            <fx-semaphore-state value="l3" color="#f59e0b" label="L3"></fx-semaphore-state>
-                        </fx-semaphore>
+                    <div class="stack stack-10">
+                        <fx-radial-gauge id="dc-gauge" class="gauge-dc" value="72" min="0" max="100"
+                            label="DC Link" unit="%" is-animated>
+                        </fx-radial-gauge>
+                        <fx-separator padding="small"></fx-separator>
+                        <fx-stack-panel orientation="horizontal" spacing="10px" align-y="bottom">
+                            <fx-push-button label="Start" background-color="#84cc16" type="latching" is-animated><i slot="icon" class="fa-solid fa-play"></i></fx-push-button>
+                            <fx-push-button label="Stop" background-color="#334155" is-animated><i slot="icon" class="fa-solid fa-stop"></i></fx-push-button>
+                            <fx-push-button label="Reset" background-color="#14b8a6" is-animated><i slot="icon" class="fa-solid fa-arrow-rotate-left"></i></fx-push-button>
+                            <fx-push-button label="E-STOP" background-color="#dc2626" shape="roundedRect" type="latching" label-position="inside" text-rendering-mode="shaded" is-animated></fx-push-button>
+                        </fx-stack-panel>
                     </div>
                 </fx-card>
 
-                <fx-card title="Drive Systems" badge="BUS" icon="fa-solid fa-microchip"
-                    accent-color="#14b8a6" badge-background="#042f2e" padding="14px 18px">
-                    <fx-stack-panel orientation="horizontal" spacing="16px">
-                        <fx-led-indicator label="MAIN INV" color="#14b8a6" is-active is-animated></fx-led-indicator>
-                        <fx-led-indicator label="CONV 2" color="#2dd4bf" is-animated></fx-led-indicator>
-                        <fx-led-indicator label="TRANSFORMER" color="#5eead4" is-blinking is-active is-interactive is-animated></fx-led-indicator>
-                        <fx-led-indicator label="CROWBAR" color="#99f6e4" is-active is-animated></fx-led-indicator>
-                    </fx-stack-panel>
-                </fx-card>
-
-                <fx-card title="Control Mode" badge="PLC" icon="fa-solid fa-gamepad"
-                    accent-color="#38bdf8" badge-background="#082f49" padding="14px 18px">
-                    <fx-stack-panel orientation="horizontal" spacing="20px">
-                        <fx-led-indicator class="led-mode" label="AUTO" color="#84cc16" name="v2ctrl" is-active is-interactive is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-mode" label="MANUAL" color="#f59e0b" name="v2ctrl" is-interactive is-animated shape="rect"></fx-led-indicator>
-                        <fx-led-indicator class="led-mode" label="REMOTE" color="#38bdf8" name="v2ctrl" is-interactive is-animated shape="rect"></fx-led-indicator>
-                    </fx-stack-panel>
+                <fx-card title="Drive Systems" badge="CONV" icon="fa-solid fa-gears"
+                    accent-color="#a78bfa" badge-background="#2e1065" padding="14px 18px">
+                    <div class="stack stack-10">
+                        <div class="stack stack-6">
+                            <span class="caption caption-violet">DC LINK</span>
+                            <fx-potentiometer id="dc-pot" class="pot-dc" value="72" min="0" max="100" label="DC" unit="%"
+                                ticks="8" is-animated>
+                            </fx-potentiometer>
+                        </div>
+                        <fx-separator padding="small"></fx-separator>
+                        <fx-stack-panel orientation="horizontal" spacing="14px">
+                            <fx-led-indicator class="led-mode" label="PRECH" color="#38bdf8" is-active is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-mode" label="READY" color="#84cc16" is-active is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-mode" label="RUN" color="#a3e635" is-active is-animated shape="rect"></fx-led-indicator>
+                            <fx-led-indicator class="led-mode" label="CHOP" color="#f59e0b" is-blinking is-active is-interactive is-animated shape="rect"></fx-led-indicator>
+                        </fx-stack-panel>
+                    </div>
                 </fx-card>
 
             </div>

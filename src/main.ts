@@ -61,21 +61,19 @@ setInterval(updateClocks, 1000);
 document.getElementById('estop-hdr')?.addEventListener('press', () => {
     FxToaster.setup({ duration: 0, placement: 'top-end' }).danger('⚠ E-STOP ACTIVATED — system halted');
 });
-document.getElementById('ack-btn')?.addEventListener('press', () => {
-    FxToaster.success('All alarms acknowledged');
-});
 
 function buildChart(id: string, data: number[], color: string, dimColor: string, normalize?: number) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const max = normalize ?? Math.max(...data);
-    data.forEach((v, i) => {
-        const bar = document.createElement('div');
-        bar.className = 'chart-bar';
-        bar.style.setProperty('--bar-h', `${Math.max(2, Math.round((v / max) * 100))}%`);
-        bar.style.setProperty('--bar-c', i === data.length - 1 ? color : dimColor);
-        el.appendChild(bar);
-    });
+    const element = document.getElementById(id);
+    if (element) {
+        const max = normalize ?? Math.max(...data);
+        data.forEach((v, i) => {
+            const bar = document.createElement('div');
+            bar.className = 'chart-bar';
+            bar.style.setProperty('--bar-h', `${Math.max(2, Math.round((v / max) * 100))}%`);
+            bar.style.setProperty('--bar-c', i === data.length - 1 ? color : dimColor);
+            element.appendChild(bar);
+        });
+    }
 }
 
 buildChart('chart-power', [1.2, 2.1, 1.8, 3.4, 4.2, 5.1, 4.8, 5.5, 6.2, 5.8, 6.1, 5.9, 5.2, 4.8, 5.5, 6.0, 5.8, 5.4, 4.5, 3.2, 2.8, 2.1, 1.5, 4.5], '#84cc16', '#365314', 7);

@@ -82,7 +82,7 @@ body {
 
 .brand {
     font-family: var(--fx-font-family, 'Inter', system-ui, sans-serif);
-    font-weight: 900;
+    font-weight: 800;
     font-size: 1.2rem;
     letter-spacing: .03em;
     color: #e2e8f0;
@@ -290,10 +290,6 @@ body {
     width: 100%;
 }
 
-.fill {
-    width: 100%;
-}
-
 fx-separator {
     width: 100%;
 }
@@ -366,90 +362,6 @@ fx-separator {
 
 .led-mode {
     --fx-led-size: 15px;
-}
-
-.led-list {
-    --fx-led-size: 11px;
-}
-
-.alarm-grid {
-    display: grid;
-    grid-template-columns: 64px 1fr 180px 110px 90px 110px;
-    align-items: center;
-    padding: 8px 12px;
-    border-bottom: 1px solid #0f1218;
-    font-size: .72rem;
-}
-
-.alarm-grid:last-child {
-    border-bottom: none;
-}
-
-.alarm-head {
-    padding: 5px 12px;
-    border-bottom: 1px solid #1c2530;
-    font-size: .65rem;
-    color: #334155;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
-
-.sev {
-    font-size: .6rem;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 3px;
-    letter-spacing: .1em;
-    width: fit-content;
-}
-
-.sev-crit {
-    background: #4c0519;
-    color: #ef4444;
-}
-
-.sev-warn {
-    background: #431407;
-    color: #f59e0b;
-}
-
-.sev-info {
-    background: #082f49;
-    color: #38bdf8;
-}
-
-.alarm-desc {
-    color: #cbd5e1;
-    font-weight: 500;
-}
-
-.alarm-comp,
-.alarm-time {
-    color: #475569;
-    font-family: monospace;
-    font-size: .65rem;
-}
-
-.alarm-time {
-    color: #334155;
-}
-
-.alarm-state {
-    font-size: .65rem;
-    font-weight: 700;
-}
-
-.alarm-state-active {
-    color: #ef4444;
-}
-
-.alarm-state-pending {
-    color: #f59e0b;
-}
-
-.alarm-state-ack {
-    color: #64748b;
 }
 
 .chart-bars,

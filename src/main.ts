@@ -45,6 +45,16 @@ if (rotary) {
     ];
 }
 
+const gridSema = document.querySelector('.sema-grid');
+if (gridSema) {
+    customElements.whenDefined('fx-semaphore').then(() => {
+        const shell = gridSema.shadowRoot?.querySelector('.shell') as HTMLElement | null;
+        if (shell) {
+            shell.style.width = '100%';
+            shell.style.justifyContent = 'space-evenly';
+        }
+    });
+}
 type ValueHost = HTMLElement & { value: number };
 type ClockHost = HTMLElement & { value: string };
 

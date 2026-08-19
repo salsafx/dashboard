@@ -102,19 +102,21 @@
 
                 <fx-card title="Grid Readings" badge="LIVE" icon="fa-solid fa-tower-broadcast"
                     accent-color="#38bdf8" badge-background="#082f49">
-                    <fx-display layout="horizontal" gap="10px">
-                        <div class="readings">
-                            <fx-display-region label="VOLT" value="400" suffix="V" size="small"></fx-display-region>
-                            <fx-display-region label="FREQ" value="50.0" suffix="Hz" size="small"></fx-display-region>
-                            <fx-display-region label="cos φ" value="0.98" size="small"></fx-display-region>
-                        </div>
-                        <fx-display-region label="AMPS" value="632" suffix="A" size="x-large"></fx-display-region>
-                    </fx-display>
-                    <div class="push-end">
-                        <fx-semaphore value="go" label="GRID STATUS" orientation="horizontal" has-shell>
+                    <div class="grid-readings">
+                        <fx-display class="grid-display" layout="horizontal" gap="10px">
+                            <div class="readings">
+                                <fx-display-region label="VOLT" value="400" suffix="V" size="small"></fx-display-region>
+                                <fx-display-region label="FREQ" value="50.0" suffix="Hz" size="small"></fx-display-region>
+                                <fx-display-region label="cos φ" value="0.98" size="small"></fx-display-region>
+                            </div>
+                            <fx-display-region label="AMPS" value="632" suffix="A" size="x-large"></fx-display-region>
+                        </fx-display>
+                        <fx-semaphore class="sema-grid" value="go" label="GRID STATUS" orientation="horizontal" has-shell>
+                            <fx-semaphore-state value="off" color="#475569" label="OFF"></fx-semaphore-state>
                             <fx-semaphore-state value="stop" color="#dc2626" label="FAULT"></fx-semaphore-state>
                             <fx-semaphore-state value="warn" color="#f59e0b" label="WARN"></fx-semaphore-state>
                             <fx-semaphore-state value="go" color="#10b981" label="OK"></fx-semaphore-state>
+                            <fx-semaphore-state value="stby" color="#14b8a6" label="STBY"></fx-semaphore-state>
                         </fx-semaphore>
                     </div>
                 </fx-card>

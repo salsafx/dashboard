@@ -276,7 +276,7 @@
         <fx-tab header="Trends" selection-color="#84cc16" icon="fa-solid fa-chart-line">
         <div class="page">
 
-            <div class="grid-3">
+            <div class="grid-4">
 
                 <fx-card title="Power Output — 24 h" badge="MW" accent-color="#84cc16" badge-background="#1a2e05" icon="fa-solid fa-bolt">
                     <div class="trend">
@@ -344,6 +344,28 @@
                     </div>
                 </fx-card>
 
+                <fx-card title="DC Link — 24 h" badge="%" accent-color="#a78bfa" badge-background="#2e1065" icon="fa-solid fa-gears">
+                    <div class="trend">
+                        <div id="chart-dc" class="chart-bars"></div>
+                        <div class="chart-axis">
+                            <span class="chart-tick">00:00</span>
+                            <span class="chart-tick">06:00</span>
+                            <span class="chart-tick">12:00</span>
+                            <span class="chart-tick">18:00</span>
+                            <span class="chart-tick chart-tick-now chart-tick-dc">NOW</span>
+                        </div>
+                        <fx-separator padding="small"></fx-separator>
+                        <div class="trend-kpi">
+                            <span class="trend-label trend-label-caps">Current</span>
+                            <span class="kpi kpi-dc">72 <span class="kpi-unit">%</span></span>
+                        </div>
+                        <div class="trend-row">
+                            <span class="trend-note">Setpoint</span>
+                            <span class="trend-meta trend-meta-dc">70 %</span>
+                        </div>
+                    </div>
+                </fx-card>
+
             </div>
 
             <div class="grid-4">
@@ -380,6 +402,84 @@
                         <div class="trend-kpi">
                             <span class="trend-label">Today</span>
                             <span class="kpi kpi-sm kpi-energy">89.4 <span class="kpi-unit">MWh</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+            </div>
+
+            <div class="grid-4">
+                <fx-card title="Pitch Angle" badge="°" accent-color="#14b8a6" badge-background="#042f2e" icon="fa-solid fa-sliders">
+                    <div class="trend">
+                        <div id="chart-pitch" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-pitch">35 <span class="kpi-unit">°</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Blade 1" badge="°" accent-color="#14b8a6" badge-background="#042f2e" icon="fa-solid fa-fan">
+                    <div class="trend">
+                        <div id="chart-blade1" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-pitch">35 <span class="kpi-unit">°</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Blade 2" badge="°" accent-color="#2dd4bf" badge-background="#042f2e" icon="fa-solid fa-fan">
+                    <div class="trend">
+                        <div id="chart-blade2" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-blade">32 <span class="kpi-unit">°</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Torque" badge="%" accent-color="#f59e0b" badge-background="#431407" icon="fa-solid fa-gauge-high">
+                    <div class="trend">
+                        <div id="chart-torque" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-torque">72 <span class="kpi-unit">%</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+            </div>
+
+            <div class="grid-4">
+                <fx-card title="Generator Temp" badge="°C" accent-color="#fda4af" badge-background="#4c0519" icon="fa-solid fa-temperature-high">
+                    <div class="trend">
+                        <div id="chart-gen" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-gen">78 <span class="kpi-unit">°C</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Grid Current" badge="A" accent-color="#38bdf8" badge-background="#082f49" icon="fa-solid fa-bolt">
+                    <div class="trend">
+                        <div id="chart-amps" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-amps">632 <span class="kpi-unit">A</span></span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Power Factor" badge="cos φ" accent-color="#2dd4bf" badge-background="#042f2e" icon="fa-solid fa-circle-notch">
+                    <div class="trend">
+                        <div id="chart-pf" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-pf">0.98</span>
+                        </div>
+                    </div>
+                </fx-card>
+                <fx-card title="Reactive Power" badge="Mvar" accent-color="#4d7c0f" badge-background="#1a2e05" icon="fa-solid fa-wave-square">
+                    <div class="trend">
+                        <div id="chart-q" class="chart-bars-sm"></div>
+                        <div class="trend-kpi">
+                            <span class="trend-label">Current</span>
+                            <span class="kpi kpi-sm kpi-q">0.9 <span class="kpi-unit">Mvar</span></span>
                         </div>
                     </div>
                 </fx-card>

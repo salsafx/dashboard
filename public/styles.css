@@ -129,8 +129,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 1800px;
-    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .grid-4 {
@@ -498,6 +498,10 @@ fx-separator {
     color: #fb7185;
 }
 
+.chart-tick-dc {
+    color: #a78bfa;
+}
+
 .trend-label {
     font-size: .65rem;
     color: #64748b;
@@ -530,6 +534,10 @@ fx-separator {
 
 .trend-meta-warn {
     color: #f59e0b;
+}
+
+.trend-meta-dc {
+    color: #a78bfa;
 }
 
 .kpi {
@@ -587,4 +595,36 @@ fx-separator {
 
 .kpi-energy {
     color: #10b981;
+}
+
+.kpi-dc {
+    color: #a78bfa;
+}
+
+.kpi-pitch {
+    color: #14b8a6;
+}
+
+.kpi-blade {
+    color: #2dd4bf;
+}
+
+.kpi-torque {
+    color: #f59e0b;
+}
+
+.kpi-gen {
+    color: #fda4af;
+}
+
+.kpi-amps {
+    color: #38bdf8;
+}
+
+.kpi-pf {
+    color: #2dd4bf;
+}
+
+.kpi-q {
+    color: #84cc16;
 }

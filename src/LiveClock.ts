@@ -31,7 +31,6 @@ export class LiveClock extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-
         this.worker = createWorker(() => {
             setInterval(() => {
                 postMessage(Date.now());

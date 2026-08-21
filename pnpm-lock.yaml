@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@salsafx/ui':
         specifier: github:salsafx/ui
-        version: https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba(lit@3.3.3)
+        version: https://codeload.github.com/salsafx/ui/tar.gz/50f1a54ab5382b50900c4341497fee9382a9b2b3(lit@3.3.3)
       lit:
         specifier: ^3.3.3
         version: 3.3.3
@@ -132,9 +132,9 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  '@salsafx/ui@https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba':
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba}
-    version: 5.0.1
+  '@salsafx/ui@https://codeload.github.com/salsafx/ui/tar.gz/50f1a54ab5382b50900c4341497fee9382a9b2b3':
+    resolution: {gitHosted: true, integrity: sha512-4rTkr88SlqLCHcMzqkNQS0igzyDYF6GdM5XgulzojLwgh1L6WSeYNEQjprmBf51BhCtT0H9u13tupb2ijfFloQ==, tarball: https://codeload.github.com/salsafx/ui/tar.gz/50f1a54ab5382b50900c4341497fee9382a9b2b3}
+    version: 5.1.2
     peerDependencies:
       lit: ^3.3.3
 
@@ -496,7 +496,7 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
-  '@salsafx/ui@https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba(lit@3.3.3)':
+  '@salsafx/ui@https://codeload.github.com/salsafx/ui/tar.gz/50f1a54ab5382b50900c4341497fee9382a9b2b3(lit@3.3.3)':
     dependencies:
       lit: 3.3.3
 

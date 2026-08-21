@@ -133,7 +133,7 @@ packages:
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
   '@salsafx/ui@https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba':
-    resolution: {gitHosted: true, integrity: sha512-cpyMvkmLr6dWKqdMMsaHPfO4P/VU4zAsPgRBanBH74lZpoaoacbKMgIpYaDyRqZg4rqTm7oXK0VbMkYNUtlMKA==, tarball: https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/salsafx/ui/tar.gz/bab35bdbef5b343717a6c38a61dd9eafbcc04fba}
     version: 5.0.1
     peerDependencies:
       lit: ^3.3.3

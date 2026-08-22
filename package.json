@@ -10,7 +10,7 @@
         "deploy": "pnpm build && npx wrangler deploy"
     },
     "dependencies": {
-        "@salsafx/ui": "github:salsafx/ui",
+        "@salsafx/ui": "^5.3.0",
         "lit": "^3.3.3"
     },
     "devDependencies": {
